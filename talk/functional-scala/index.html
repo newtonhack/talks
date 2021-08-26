@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Functional programming in Scala</title>
+
+    <meta name="description" content="Functional programming in Scala">
+    <meta name="author" content="Anvay Patil">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../reveal/css/reveal.css">
+    <link rel="stylesheet" href="scala.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+    <link rel="stylesheet" href="../reveal/lib/css/wrapper.css">
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? '../reveal/css/print/pdf.css' : '../reveal/css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <section>
+                <h1>Scala</h1>
+                <h4>Object-Functional Programming language</h4>
+                <p>
+                    <small>Created by <a href="">Anvay Patil</a></small>
+                </p>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <p><small>Note: arrow keys to move on slides, Esc to zoom-out </small></p>
+        </section>
+            <section>
+                <h4>About Me ?</h4>
+            </section>
+        </section>
+        <section>
+            <h3>Life as a programmer</h3>
+            <iframe width="620" height="515" src="https://www.youtube.com/embed/_Nua3Cjdik0" frameborder="0" allowfullscreen>
+            </iframe>
+        </section>
+        <section>
+            <h2>Java is so important to the world</h2>
+            <p class="fragment">But, question is Java or JVM?  <span class="fragment">Wait a sec.! aint both same.?</span></p>
+        </section>
+        <section>
+            <h3><strike>Java </strike>VM => Polygot VM</h3>
+            <p class="fragment">I got 99 languages to choose, but JVM is one.!</p>
+            <p class="fragment">Languages like:
+            <ul class="fragment">
+                <li>Scala</li>
+                <li>Groovy</li>
+                <li>Kotlin</li>
+                <li>JRuby</li>
+                <li>Jython</li>
+                <li>and the list goes on..!</li>
+            </ul>
+            </p>
+        </section>
+        <section>
+            <h3>But What is the problem with Java?</h3>
+            <p class="fragment"> Very Much Noun-oriented</p>
+            <p class="fragment"> Doesn't have Compound value types (Structs in C)</p>
+            <p class="fragment"> discrimination of (primitives and arrays) with other objects </p>
+            <p class="fragment"> The way java approaches concurrency using threads and shared data</p>
+            <p class="fragment"> Parallel programming is difficult | No built-in support</p>
+            <p class="fragment"> And many more..!!</p>
+        </section>
+        <section>
+            <p style="font-size: 32px;">Why these problems exists and we can't do anything.?</p>
+            <p class="fragment">legacy code > parallel distributed programming is a need of the day,
+                but was not when language got invented
+            </p>
+            <br/>
+            <p style="font-size: 32px;" class="fragment">So do you think Scala addresses all of those.?</p>
+            <p class="fragment">Well, they tried to address to make a language look good for 2020 developer.</p>
+        </section>
+        <section>
+            <p style="font-size: 32px;">So since we know why, lets see what is Scala?</p>
+        </section>
+        <section>
+            <h3>So, What is Scala?</h3>
+            <ul>
+                <li class="fragment">One of those programming language on JVM</li>
+                <li class="fragment">It is pure better Object Oriented than Java</li>
+                <li class="fragment">It brings good parts of
+                    <a href="http://en.wikipedia.org/wiki/Functional_programming" target="_blank">Functional programming</a> world</li>
+                <li class="fragment">Statically typed language like Java</li>
+                <li class="fragment">Functions are First-Class citizens</li>
+                <li class="fragment">Lines of code reduces extremely, offering less maintaince</li>
+                <li class="fragment">You can code in Scala & can be used as a Java library</li>
+                <li class="fragment">Also, Attempts to make better Java. really..?</li>
+
+            </ul>
+        </section>
+        <section>
+            <section>
+                <p>We all know <br/>Object Oriented Programming?</p>
+                <p class="fragment">Imperative/Structured/Procedural Programming</p>
+                <br/>
+                    <p><span class="fragment"> But, functional programming</span> <span class="fragment">, really? one more jargon..!!</span>
+                </p>
+            </section>
+            <section>
+                <h2>Different Programming Styles that exists?</h2>
+                <ul>
+                    <li><a href="http://en.wikipedia.org/wiki/Imperative_programming" target="_blank">Imperative</a>
+                    </li>
+                    <li><a href="http://en.wikipedia.org/wiki/Structured_programming" target="_blank">Structured</a>
+                    </li>
+                    <li><a href="http://en.wikipedia.org/wiki/Procedural_programming" target="_blank">Procedural</a>
+                    </li>
+                    <li><a href="http://en.wikipedia.org/wiki/Functional_programming" target="_blank">Functional</a>
+                    </li>
+                    <li><a href="http://en.wikipedia.org/wiki/Event-driven_programming" target="_blank">Event-Driven |
+                        Time Driven</a></li>
+                    <li><a href="http://en.wikipedia.org/wiki/Object-oriented_programming" target="_blank">Object-oriented</a>
+                    </li>
+                    <li><a href="http://en.wikipedia.org/wiki/Declarative_programming" target="_blank">Declarative</a>
+                    </li>
+                    <li><a href="http://en.wikipedia.org/wiki/Automata-based_programming" target="_blank">Automata-based
+                        programming languages</a></li>
+                </ul>
+                <aside class="notes">
+                </aside>
+            </section>
+        </section>
+        <section>
+            <section>
+                <blockquote>
+                    Functional programming mimics the way mathematician's think about functions
+                </blockquote>
+                <p class="fragment">What is &lambda; expressions ?</p>
+                <p class="fragment"><i>f</i>(x, y) &rarr; x *(x + y)*y</p>
+                <p class="fragment">In programming world, &lambda; is just an anonymous function</p>
+                <p class="fragment">code is evaluated as each line is an expression, nothing is a statement</p>
+            </section>
+            <section>
+                <blockquote>
+                    It is a style of programming that emphasizes the evaluation of expressions rather than the execution
+                    of commands
+                    avoiding state and mutable data.
+                </blockquote>&mdash;
+                <a href="http://www.cs.nott.ac.uk/~gmh/faq.html" target="_blank">comp.lang.functional FAQ</a>
+            </section>
+        </section>
+        <section>
+            <h3>Functional programming principles for Java developers</h3>
+            <ol>
+                <li class="fragment">Avoid Mutable state, encourage immutability</li>
+                <li class="fragment">Functions are First-class values, use it</li>
+                <li class="fragment">Side effect free functions (given input X output will always be Y)</li>
+                <li class="fragment">use more Function variables, less Instance variables (only if needed)</li>
+                <li class="fragment">Higher-Order functions</li>
+                <li class="fragment">Lazy vs Eager Evaluation</li>
+            </ol>
+        </section>
+        <section>
+            <h3>What difference it make.?</h3>
+            <blockquote>
+                OO makes code understandable by encapsulating moving parts
+                <br/>
+                FP makes code understandable by minimizing moving parts.
+            </blockquote>
+            <p style="font-size: 20px;"><a>Michael Feathers</a>, author of "Working with Legacy Code"</p>
+            <br/>
+            <p class="fragment">In simple terms, if you have functions with no side effects,<br/>
+                it can be given to any free processor for execution enabling parallelism.</p>
+        </section>
+        <section>
+                <p style="font-size: 30px;">Alright enough talking, show me some Scala code?</p>
+        </section>
+        <section>
+            Hello World in Java
+<pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+    public class HelloJava {
+        public static void main(String[] args) {
+            System.out.println("Hello World!");
+        }
+    }
+
+</code>
+</pre>
+            Hello World in Scala
+    <pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    object HelloScala {
+        def main(args: Array[String]): Unit = {
+            println("Hello World!")
+        }
+    }
+    </code>
+                    </pre>
+        </section>
+        <section>
+            <section>
+                <p style="font-size: 36px;">Let's fire up, Scala REPL and do things in action</p>
+            </section>
+            <section>
+                <p style="font-size: 36px;">Expressions, Values, Variables</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> val b = 3.14
+    b: Double = 3.14
+
+    scala> val d: Int = 6.28
+     &lt;console&gt;:7: error: type mismatch;
+        found   : Double(6.28)
+        required: Int
+        val d: Int = 6.28
+
+    scala> val x = 2 + 3
+    x: Int = 5
+
+    scala> val y = 3 * x + 2
+    y: Int = 17
+    </code>
+</pre>
+            </section>
+            <section>
+<p style="font-size: 36px;">Functions, Anonymous Functions</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> def Fahrenheit2Celsius (x: Double) = (x - 32) * 5/9.0
+        Fahrenheit2Celsius: (x: Double)Double
+
+    scala> val add1 = (x: Int) => x + 1
+        add1: (Int) => Int = &lt;function1&gt;
+
+    scala> val add100 = (x: Int) => x + 100
+        add100: (Int) => Int = &lt;function1&gt;
+    </code>
+</pre>
+            </section>
+            <section>
+<p style="font-size: 36px;">Function Composition with compose & andThen</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> def f(s: String) = "func(" + s + ")"
+        f: (String)java.lang.String
+
+    scala> def g(s: String) = "gunc(" + s + ")"
+        g: (String)java.lang.String
+
+    scala> val fComposeG = f _ compose g _
+        fComposeG: (String) => java.lang.String = &lt;function&gt;
+
+    scala> fComposeG("ABC")
+        res0: java.lang.String = func(gunc(ABC))
+
+    scala> val fAndThenG = f _ andThen g _
+        fAndThenG: (String) => java.lang.String = &lt;function&gt;
+
+    scala> fAndThenG("ABC")
+        res1: java.lang.String = gunc(func(ABC))
+    </code>
+</pre>
+            </section>
+            <section>
+<p style="font-size: 36px;">Function Currying</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> def strcat(s1:String)(s2:String)=s1+s2
+        strcat: (s1: String)(s2: String)String
+
+    scala> strcat("Foo")("Bar")
+        res0: String = FooBar
+    </code>
+</pre>
+            </section>
+            <section>
+<p style="font-size: 36px;">Higher Order Functions</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> def safeStringOp(s: String, f: String => String) = {
+        |   if (s != null) f(s) else s
+        | }
+        safeStringOp: (s: String, f: String => String)String
+
+    scala> def reverser(s: String) = s.reverse
+        reverser: (s: String)String
+
+    scala> safeStringOp(null, reverser)
+        res4: String = null
+
+    scala> safeStringOp("Ready", reverser)
+        res5: String = ydaeR
+    </code>
+</pre>
+            </section>
+</section>
+<section>
+    <section>
+        <p style="font-size: 36px;">Object Orientation in Scala</p>
+    </section>
+    <section>
+<p style="font-size: 36px;">Classes</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    class Point(val xc: Int, val yc: Int) {
+        var x: Int = xc
+        var y: Int = yc
+        def move(dx: Int, dy: Int) = { x = x + dx ; y = y + dy }
+    }
+    object Test {
+        def main(args: Array[String]) {
+            val pt = new Point(10, 20);
+            // Move to a new location
+            pt.move(10, 10);
+        }
+    }
+    </code>
+</pre>
+</section>
+<section>
+    <p style="font-size: 36px;">Extending the Class</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    class Location(override val xc: Int, override val yc: Int, val zc :Int)
+        extends Point(xc, yc){
+            var z: Int = zc
+            def move(dx: Int, dy: Int, dz: Int)=
+                { x = x + dx; y = y + dy; z = z + dz;}
+    }
+    </code>
+</pre>
+</section>
+    <section>
+<p style="font-size: 36px;">Traits in Scala</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    trait Quacking {
+        def quack() = {
+        println("Quack quack quack!")
+        }
+    }
+    class Duck {
+        val version = "ACME Inc. Duck"
+    }
+    val donaldDuck = new Duck with Quacking
+        donald.quack()
+    </code>
+</pre>
+    </section>
+</section>
+<section>
+    <section>
+        <p style="font-size: 36px;">Basic Data Structures</p>
+    </section>
+<section>
+<p style="font-size: 36px;">Lists</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> val numbers = List(1, 2, 3, 4)
+        numbers: List[Int] = List(1, 2, 3, 4)
+    </code>
+</pre>
+</section>
+    <section>
+        <p style="font-size: 36px;">Sets</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> Set(1, 1, 2)
+        res0: scala.collection.immutable.Set[Int] = Set(1, 2)
+    </code>
+</pre>
+    </section>
+    <section>
+        <p style="font-size: 36px;">Tuple</p>
+<p>A tuple groups together simple logical collections of items without using a class.</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> val hostPort = ("localhost", 80)
+        hostPort: (String, Int) = (localhost, 80)
+    </code>
+</pre>
+    </section>
+    <section>
+        <p style="font-size: 36px;">Maps</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+    scala> val smallMap=Map("myKey"->"myValue","foo"->"bar")
+        smallMap: scala.collection.immutable.Map[String,String] =
+            Map(myKey -> myValue,foo -> bar)
+    </code>
+</pre>
+    </section>
+</section>
+<section>
+    <section>
+        <p style="font-size: 36px;">Scala Collections are awesome.!</p>
+        <p style="font-size: 22px;" class="fragment">they can be operated sequential as well as parallel</p>
+    </section>
+    <section>
+        <p style="font-size: 36px;">map, foreach function</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+//map
+    scala>val numbers = List(1, 2, 3, 4)
+
+    scala> numbers.map((i: Int) => i * 2)
+        res0: List[Int] = List(2, 4, 6, 8)
+// foreach
+    scala> val persons = List("Jason", "John", "Matt", "Bob")
+        persons: List[java.lang.String] = List(Jason, John, Matt, Bob)
+
+    scala> persons.foreach(person => println("Hello " + person))
+        Hello Jason
+        Hello John
+        Hello Matt
+        Hello Bob
+    </code>
+</pre>
+    </section>
+    <section>
+        <p style="font-size: 36px;">filter, zip function</p>
+<pre style="width: 65%; font-size: .65em;">
+    <code data-trim>
+//filter
+    scala>val numbers = List(1, 2, 3, 4)
+
+    scala> numbers.filter((i: Int) => i % 2 == 0)
+        res0: List[Int] = List(2, 4)
+
+// zip
+    scala> List(1, 2, 3).zip(List("a", "b", "c"))
+        res0: List[(Int, String)] = List((1,a), (2,b), (3,c))
+    </code>
+</pre>
+        <p style="font-size: 25px;">And, many more <a href="https://twitter.github.io/scala_school/collections.html" target="_blank">here</a></p>
+    </section>
+
+</section>
+<section>
+    <p style="font-size: 36px;">Advanced topics in Scala</p>
+    <ul>
+        <li class="fragment">Scala Hierarchy</li>
+        <li class="fragment">Pattern Matching</li>
+        <li class="fragment">Case classes</li>
+        <li class="fragment">Operator Overloading</li>
+        <li class="fragment">Parametric Polymorphism</li>
+        <li class="fragment">Scala Collections</li>
+        <li class="fragment">Actors & Concurrency</li>
+        <li class="fragment">Combinator Parsing</li>
+    </ul>
+</section>
+<section>
+    <p style="font-size: 36px;">References & Links</p>
+    <ul>
+        <li><a href="https://twitter.github.io/scala_school/">Twitter Scala School</a></li>
+        <li><a href="http://twitter.github.io/effectivescala/">Effective Scala</a></li>
+        <li><a href="http://www.amazon.in/Scala-Impatient-Cay-S-Horstmann/dp/0321774094">Scala for Impatient book</a></li>
+    </ul>
+</section>
+    <section>
+            <h3>Q&A</h3>
+            <p style="font-size: 36px;" class="fragment">Thank you :)</p>
+    </section>
+    </div>
+</div>
+
+<script src="../reveal/lib/js/head.min.js"></script>
+<script src="../reveal/js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        dependencies: [
+            { src: '../reveal/plugin/markdown/marked.js' },
+            { src: '../reveal/plugin/markdown/markdown.js' },
+            { src: '../reveal/plugin/notes/notes.js', async: true },
+            { src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+    });
+</script>
+
+</body>
+</html>

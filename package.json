@@ -1,0 +1,26 @@
+{
+  "name": "anvaypatil",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpFile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anvaypatil/anvaypatil-website.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anvaypatil/anvaypatil-website/issues"
+  },
+  "homepage": "https://github.com/anvaypatil/anvaypatil-website.git#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-server": "^0.1.0",
+    "gulp-webserver": "^0.9.1",
+    "opn": "^5.3.0",
+    "graceful-fs": "4.2.2"
+  }
+}

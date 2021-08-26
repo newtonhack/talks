@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Handlee');
+.reveal {
+  font-family: 'Handlee', cursive;
+}
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: 'Handlee', cursive;
+}
+
+body {
+  background-color: #d2f6f6;
+}

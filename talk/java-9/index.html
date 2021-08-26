@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Java 9, An early sneak peek</title>
+
+    <meta name="description" content="Java 9, An early sneak peek">
+    <meta name="author" content="Anvay">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="java9.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="reveal/lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+        document.write('<link rel="stylesheet" href="reveal/css/print/' + (window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper') + '.css" type="text/css" media="print">');
+    </script>
+    <!--[if lt IE 9]>
+    <script src="reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <section class="page">
+                <h1>Java 9</h1>
+                <h4>An early sneak peek</h4>
+                <p>
+                    <small>talk by <a href="">Anvay P</a></small>
+                </p>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <p>
+                    <small>Note: arrow keys to move on slides, Esc to zoom-out</small>
+                </p>
+            </section>
+            <section class="page">
+                <h4>About Me ?</h4>
+            </section>
+        </section>
+        <section class="page">
+            <h4>Why does Java needs advancement?</h4>
+            <blockquote>
+                There are only two kinds of languages; the one people love to complains about and the other nobody use
+                it.
+            </blockquote>
+            <p style="font-size: 20px;"><a>Bjarne Stroustrup</a>, author of C++ </p>
+        </section>
+        <section class="page">
+            <h3>Journey of the Language</h3>
+            <ul>
+                <li class="fragment">Java was born in 1995</li>
+                <li class="fragment">Interesting question is,
+                    <br/><i>&nbsp;&nbsp;&nbsp;Why java lasted so long?</i></li>
+                <li class="fragment">Language Extension Model was always based on pain points,
+                    <i><br/>&nbsp;&nbsp;&nbsp;! fancy features to compete other programming languages</i>
+                </li>
+                <li class="fragment">Big changes in Java until now<br/>
+                    <i>Generics, Lambdas</i></li>
+            </ul>
+        </section>
+        <section class="page">
+            <h4>JEP Process</h4>
+            <p>How are changes/extensions make their way to JDK?</p>
+            <a target="_blank" href="http://cr.openjdk.java.net/~mr/jep/jep-2.0-02.html">
+                <img src="img/jep.png">
+            </a>
+        </section>
+        <section class="page">
+            <h4>Quick Recap of JDK 8</h4>
+            <ul>
+                <li>Lambdas</li>
+                <li>Streams</li>
+                <li>Method References</li>
+                <li>Type Annotations</li>
+                <li>Nashorn JS Engine</li>
+                <li>new tools like jdeps,jj</li>
+                <li>default methods in interfaces</li>
+            </ul>
+        </section>
+        <section class="page">
+            <h4>Outline of JDK 9</h4>
+            <ul>
+                <li>Project JigSaw - Modules</li>
+                <li>Project Kulla - Java REPL</li>
+                <li>Project Coin - adding cool features in language</li>
+                <li>Project Argona - Thread.onSpinWait()</li>
+                <li>HTTP & Process API</li>
+                <li>JDK Benchmarks</li>
+                <li>Garbage collector</li>
+                <li>Collection API</li>
+            </ul>
+            <br/>
+            <a href="http://openjdk.java.net/projects/jdk9/" target="_blank">.</a>
+        </section>
+        <section class="page">
+            <h2>"Modules" (Project JigSaw)</h2>
+        </section>
+
+        <section class="page">
+            <h4>Lets start with pain points?</h4>
+        </section>
+        <section class="page">
+            <h4>ClassPath Paint point</h4>
+            <div class="fragment">
+                <img src="img/hadoop.png"/>
+                <p>Hadoop has 110 jars in classpath</p>
+            </div>
+        </section>
+        <section class="page">
+            <h4>Monolithic JDK</h4>
+            <ul>
+                <li class="fragment">IOT example, can need small JDK part</li>
+                <li class="fragment">Cloud servers which might need JDK parts for diff purposes</li>
+            </ul>
+        </section>
+        <section>
+            <section class="page">
+                <h4>JDK dependency graph</h4>
+                <p class="fragment">Issue is API usage is are not organized properly
+                <p/>
+                <p class="fragment">Eg: Someone using CORBA might use some util classes from AWT</p>
+            </section>
+            <section class="page">
+                <h4>API's usage mess, within JDK</h4>
+                <a href="http://cr.openjdk.java.net/~mchung/jigsaw/graphs/jdk7-b65.png" target="_blank">
+                    <img style="border: none;margin: 0px;" src="img/jdk-7.png" width="100%"></a>
+                <a href="http://cr.openjdk.java.net/~mr/jigsaw/ea/module-summary.html">.</a>
+            </section>
+        </section>
+        <section class="page">
+            <h4>JAR hell problem</h4>
+            <p class="fragment"><i>Suppose you have 2 jars with same class name placed in same package
+                <br>but the class code differs, which one will be loaded?</i></p>
+            <p class="fragment">We don't know what depends on what</p>
+        </section>
+        <section class="page">
+            <h6>Restrict API's</h6>
+            <p>problems with sun's internal / unsafe API's <br>
+                usage by plenty of popular frameworks</p>
+            <ul>
+                <li class="fragment">*.sun.misc.*</li>
+                <li class="fragment">*.internal.*</li>
+                <li class="fragment">Unsafe.java</li>
+            </ul>
+        </section>
+        <section class="page">
+            <h4>Common Problems</h4>
+            <p>Services & Contract</p>
+            <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  Driver driver = DriverFactory.getDriver("OracleDriver");
+  ...
+    // in factory
+  Driver driver = new OracleDriverImpl();
+
+</code>
+</pre>
+        </section>
+        <section class="page">
+            <h5>Weak Security API's</h5>
+            <p>java.lang.SecurityManager::checkPackageAccess</p>
+        </section>
+        <section class="page">
+            <h5>So what we need</h5>
+            <ul>
+                <li class="fragment">Strong Encapsulation</li>
+                <li class="fragment">Reliable Configuration</li>
+                <li class="fragment">Classes/Interfaces visibility</li>
+            </ul>
+        </section>
+        <section class="page">
+            <h6>What is Module</h6>
+            <p class="fragment">Module =
+                <span class="fragment">A container of packages +</span><br/>
+                <span class="fragment"> Names the modules upon which it depends +</span><br/>
+                <span class="fragment"> Exports specific packages for use only by modules that depends upon it</span>
+            </p>
+        </section>
+        <section class="page">
+            <h4>Code Encapsulation</h4>
+            <div style="margin-left: 10%">
+                <div style="background-color:#696969;padding:20px;width: 80%; border-radius: 5px;">
+                    <div class="Row">
+                        <div class="Column" style="background-color:#2b2b2b; border-radius: 5px;">
+                            <p>Fields & Methods</p>
+                        </div>
+                    </div>
+                    <div class="Row">
+                        <div class="Column" style="background-color:#2b2b2b;border-radius: 5px;">
+                            <p>
+                                <span>Abstract Classes</span>
+                            </p>
+                        </div>
+                        <div class="Column" style="background-color:#2b2b2b; border-radius: 5px;">
+                            <p>
+                                <span>Concrete Classes</span>
+                            </p>
+                        </div>
+                        <div class="Column" style="background-color:#2b2b2b;border-radius: 5px;">
+                            <p>
+                                <span>Interfaces</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="Row">
+                        <div class="Column" style="background-color:#2b2b2b; border-radius: 5px;">
+                            <p>Packages</p>
+                        </div>
+                    </div>
+                    <div class="Row">
+                        <div class="Column" style="background-color:#361f3f; border-radius: 5px;">
+                            <p>Modules</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page">
+            <h4>Defining a Module</h4>
+            <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+ $ cat module-info.java
+
+ module some.complex.sql {
+    requires java.logging;
+    requires java.xml;
+
+    exports java.sql;
+    exports javax.sql;
+    exports javax.transaction.xa;
+ }
+
+</code>
+</pre>
+            <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+ $ javac module-info.java
+ $ ls -l *.class
+ *-rw-r-r-- 194 module-info.class  // Module descriptors //
+
+</code>
+</pre>
+        </section>
+        <section class="page">
+            <h4>Used Keywords from reserved</h4>
+            <p> module, exports, to, uses, provides, with, requires</p>
+        </section>
+        <section class="page">
+            <h4>Sample Module</h4>
+            <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  ./langtools/src/jdk.compiler/share/classes/module-info.java
+    module jdk.compiler {
+       requires public java.compiler;
+
+       exports com.sun.source.tree;
+       exports com.sun.tools.doclint to jdk.javadoc;
+       exports com.sun.tools.javac.api to jdk.javadoc, jdk.jshell;
+       exports com.sun.tools.javac.code to jdk.javadoc, jdk.jshell;
+       exports com.sun.tools.javac.comp to jdk.javadoc, jdk.jshell;
+       exports com.sun.tools.javac.file to jdk.jdeps, jdk.javadoc;
+       exports com.sun.tools.javac.platform to jdk.javadoc;
+       exports com.sun.tools.javac.tree to jdk.javadoc, jdk.jshell;
+
+       uses javax.annotation.processing.Processor;
+
+       provides com.sun.tools.javac.platform.PlatformProvider
+          with com.sun.tools.javac.platform.JDKPlatformProvider;
+    }
+
+</code>
+</pre>
+        </section>
+        <section class="page">
+            <h4>Types of Modules</h4>
+            <ul>
+                <li>Named</li>
+                <p>&nbsp;&nbsp;i.e. containing module-info.class</p>
+                <li>Automatic</li>
+                <p>&nbsp;&nbsp;i.e. jar files placed to the module path</p>
+                <li>Unammed</li>
+                <p>&nbsp;&nbsp;contains all the types in the classpath</p>
+            </ul>
+        </section>
+        <section>
+            <section class="page">
+                <h4>Java after Modules</h4>
+                <ul>
+                    <li>JAR/classpath hell reduction</li>
+                    <li>better of managing expressive/transitive dependencies</li>
+                    <li>hide some (private) packages; com.sun.misc.*</li>
+                    <li>Lazy class loading and initialisation -> NoClassDefFoundError before loading</li>
+                    <li>system instead of manual security</li>
+                    <li>JRE size reduction</li>
+                    <li>Early flights might be rough :)</li>
+                </ul>
+            </section>
+            <section class="page">
+                <h4>Modules in JDK</h4>
+                <img src="img/module.png"/>
+            </section>
+        </section>
+        <section>
+            <section class="page">
+                <h6>Java REPL (Project Kulla)</h6>
+                <p>Lets see in action :)</p>
+            </section>
+        </section>
+        <section>
+            <section class="page">
+                <h6>Some cool features (Project Coin)</h6>
+                <ul>
+                    <li>Private Default Methods</li>
+                    <li>Effectively-final variables in try-with-resources expressions</li>
+                    <li>Can’t use single _ as a name</li>
+                    <li>@SafeVarargs in private methods</li>
+                    <li>Using diamond with anonymous classes when actual type may be deduced</li>
+                </ul>
+            </section>
+            <section class="page">
+                <h5>Private default methods</h5>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+ interface IName {
+    void a() { /*Common code*/ ; /*a’s specific code*/ }
+    void b() { /*Common code*/ ; /*b’s specific code*/ }
+    private void c() { /*Common code*/ ; }
+  }
+
+</code>
+</pre>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+ interface IName {
+    private void foo(String param);
+                 // Error: private method must declare body.
+    private abstract void bar(int j);
+                // Error: private & abstract: bad combo
+    void normalMethod(int x); // OK.
+    private Object commonMethod() { return null; } // OK.
+ }
+
+</code>
+</pre>
+            </section>
+            <section class="page">
+                <h5>Effectively-final variables in try-with-resources expressions</h5>
+                <p>Till Java 8</p>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  public static void main(String... args) throws ...{
+        FileReader f = new FileReader(“test.txt");
+        try (br =new BufferedReader(fr)) {
+            // do something
+        } catch (Exception ex) {
+      }
+    }
+</code>
+</pre>
+                <p>In Java 9</p>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+ public static void main(String... args) throws ...{
+        FileReader f = new FileReader(“test.txt”);
+        br =new BufferedReader(fr);
+        try (br) {
+            // do something
+        } catch (Exception ex) {
+      }
+    }
+
+</code>
+</pre>
+            </section>
+            <section class="page">
+                <h5>@SafeVarargs in private methods</h5>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  class VarargsFinalOnly {
+    @SafeVarargs private void m(List<String>... args) { }
+  }
+
+</code>
+</pre>
+            </section>
+            <section class="page">
+                <h5>Diamond with anonymous classes</h5>
+                <p>Till Java 8</p>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  ./TypeInferrenceTest.java:7: error: cannot infer
+ type arguments for HashMap<K,V>
+  new HashMap<>()
+  ^
+
+ reason: cannot use '<>' with anonymous inner classes
+ where K,V are type-variables:
+  K extends Object declared in class HashMap
+  V extends Object declared in class HashMap
+ 1 error
+
+</code>
+</pre>
+                <p>In Java 9</p>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+ public class TypeInferenceTest{
+        Map<String,String> map=new HashMap<>(){
+            map.put("key","value");
+        }
+    }
+
+</code>
+</pre>
+            </section>
+            <section class="page">
+                <h4>_ as a var name</h4>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+   // key: compiler.warn.underscore.as.identifier
+   // options: -source 8 -Xlint:-options
+   class UnderscoreAsIdentifierWarning {
+        String _ = null;
+   }
+
+</code>
+</pre>
+            </section>
+        </section>
+        <section>
+            <section class="page">
+                <h4>Process API Updates</h4>
+                <ul>
+                    <li>Get pid for the running JVM</li>
+                    <li>Get list of processes</li>
+                    <li>Operations on tree of processes</li>
+                </ul>
+            </section>
+            <section class="page">
+                <h4>Process API Updates</h4>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+   Process proc = Runtime.getRuntime()
+        .exec(new String[]{"/bin/sh", "-c", "echo $PPID"});
+    if (proc.waitFor() == 0) {
+        InputStream in = proc.getInputStream();
+        int available = in.available();
+        byte[] outputBytes = new byte[available];
+        n.read(outputBytes);
+        String pid = new String(outputBytes);
+        System.out.println("Your pid is " + pid);
+    }
+
+</code>
+</pre>
+            </section>
+        </section>
+        <section>
+            <section class="page">
+                <h4>Spin Loop hint(Project Argona)</h4>
+                <p>JEP 285: Sping-wait Hints</p>
+                <p>To improve performance & Latency</p>
+                <p>New method java.lang.Thread.onSpinWait()</p>
+            </section>
+            <section class="page">
+                <h4>Spin Hint(Producer-Consumer Problem)</h4>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+   class EventHandler {
+        volatile boolean eventNotificationNotReceived;
+        void waitForEventAndHandleIt() {
+            while ( eventNotificationNotReceived ) {
+                java.lang.Thread.onSpinWait();
+            }
+            readAndProcessEvent();
+        }
+        void readAndProcessEvent() {
+            // Read event from some source and process it
+            . . .
+        }
+    }
+
+</code>
+</pre>
+            </section>
+        </section>
+        <section>
+            <section class="page">
+                <h4>HTTP API's in JDK</h4>
+                <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  HttpResponse res =
+        HttpRequest.create(new URI("http://www.google.com"))
+                            .body(noBody())
+                            .GET().send();
+    int responseCode = res.responseCode();
+    String responseBody = res.body(asString());
+
+    System.out.println(responseBody);
+
+</code>
+</pre>
+            </section>
+            <section class="page">
+     <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+    HttpRequest req =
+        HttpRequest.create(new URI("http://www.google.com"))
+                        .body(noBody()).GET();
+        CompletableFuture<HttpResponse> asyncResp = req.sendAsync();
+        Thread.sleep(10);
+
+        if (!asyncResp.isDone()) {
+            asyncResp.cancel(true);
+            System.err.println("timeout");
+        }
+    </code>
+         </pre>
+            </section>
+        </section>
+        <section class="page">
+            <h4>And Many more..!</h4>
+            <ul>
+                <li>many performance related changes are added</li>
+                <li>Money Control API's</li>
+                <li>New Version Scheme (MAJOR.MINOR.SECURITY)</li>
+                <p>&nbsp;&nbsp;&nbsp;1.8.0_20 =>8.1.2</p>
+                <li>G1 will be default GC</li>
+                <li>Variable Handles (part of Unsafe)</li>
+                <li>Parser API for Nashorn</li>
+            </ul>
+        </section>
+        <section class="page">
+            <h4>Beyond Java 9</h4>
+        </section>
+        <section class="page">
+            <h4>Value Classes</h4>
+            <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  value class Point {
+        int x;
+        int y;
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+  }
+
+</code>
+</pre>
+        </section>
+        <section class="page">
+            <h4>Rectified Generics</h4>
+            <pre style="width: 65%; font-size: .65em;">
+<code data-trim>
+  List<int> intList = new ArrayList<>();
+...
+int val = intList.get(0);
+class List$Point { Point get(Point index); }
+
+</code>
+</pre>
+        </section>
+        <section class="page">
+            <h4>So Stay Tuned for Java 9+</h4>
+            <p>Things are getting interesting.!</p>
+        </section>
+        <section class="page">
+            <p style="font-size: 36px;">References & Links</p>
+            <ul>
+                <li><a href="http://openjdk.java.net/projects/jdk9/">JDK features list</a></li>
+                <li><a href="http://openjdk.java.net/projects/jigsaw/spec/sotms/">The State of Module System</a>
+                </li>
+                <li><a href="http://openjdk.java.net/projects/jigsaw/spec/issues/">Open Issues in Module System</a>
+                </li>
+                <li><a href="http://openjdk.java.net/jeps/222">Project Kulla- JREPL</a></li>
+            </ul>
+        </section>
+        <section class="page">
+            <h3>Q&A</h3>
+            <p style="font-size: 36px;" class="fragment">Thank you :)</p>
+        </section>
+    </div>
+    <!--
+        <div class="video-background">
+            <div class="video-foreground">
+                <iframe src="https://www.youtube.com/embed/W0LHTWG-UmQ?controls=0&amp;showinfo=0&amp;rel=0&amp;autoplay=1&amp;loop=1&amp;playlist=W0LHTWG-UmQ" frameborder="0" allowfullscreen=""></iframe>
+            </div>
+        </div>
+        -->
+
+    <div class="video-player">
+        <video id="mp4-player" autoplay loop muted class="background-video brightness">
+            <source src="videos/space.mp4" type="video/mp4">
+        </video>
+        <!--<div class="shadow"></div>-->
+    </div>
+
+</div>
+
+<script src="reveal/lib/js/head.min.js"></script>
+<script src="reveal/js/reveal.js"></script>
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        controls: true,
+        progress: true,
+        history: true,
+        mouseWheel: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            {
+                src: 'reveal/lib/js/classList.js', condition: function () {
+                    return !document.body.classList;
+                }
+            },
+            {
+                src: 'reveal/plugin/markdown/showdown.js', condition: function () {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            },
+            {
+                src: 'reveal/plugin/markdown/markdown.js', condition: function () {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            },
+            {
+                src: 'reveal/plugin/highlight/highlight.js', async: true, callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            },
+            {
+                src: 'reveal/plugin/zoom-js/zoom.js', async: true, condition: function () {
+                    return !!document.body.classList;
+                }
+            },
+            {
+                src: 'reveal/plugin/notes/notes.js', async: true, condition: function () {
+                    return !!document.body.classList;
+                }
+            }
+            // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+    });
+
+</script>
+
+</body>
+</html>

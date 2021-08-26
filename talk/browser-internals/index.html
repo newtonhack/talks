@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Internals of Web Browsers</title>
+
+    <meta name="description" content="Internals of Web Browsers">
+    <meta name="author" content="Anvay Patil">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../reveal/css/reveal.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+    <link rel="stylesheet" href="../reveal/lib/css/wrapper.css">
+    <link rel="stylesheet" href="internalsweb.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? '../reveal/css/print/pdf.css' : '../reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <section>
+                <h1>Browser Internals</h1>
+                <p>
+                    <small>Created by <a href="">Anvay Patil</a></small>
+                </p>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <p>
+                    <small>Note: arrow keys to move on slides, Esc to zoom-out</small>
+                </p>
+            </section>
+            <section>
+                <h3>About Me ?</h3>
+            </section>
+        </section>
+        <section data-background-color="#fffff0">
+            <section>
+                <h2>Why should one know about internals?</h2>
+                <aside class="notes">
+                   <ul>
+                       <li>Businesses started invading web</li>
+                       <li>Web 2.0 started harnessing capabilities of browsers.</li>
+                       <li>If we want to do something disruptive, one need knowledge of Internals.</li>
+                       <li>WebAssembly: AutoCAD on web</li>
+                   </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>What are we deep diving into.?</h2>
+                <ul class="fragment">
+                    <li>Yesterday's and Today's, Browsers</li>
+                    <li>Architecture</li>
+                    <li>Rendering Engines</li>
+                    <li>Javascript Engines</li>
+                </ul>
+            </section>
+        </section>
+        <section data-background-iframe="http://www.evolutionoftheweb.com" data-background-interactive>
+        </section>
+        <section data-background-color="#e0f1e3">
+            <section>
+                <h3>High Level Architecture</h3>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                     width="457"
+                     height="332" viewBox="-0.5 -0.5 451 326" filter="url(#dropShadow)">
+                    <defs>
+                        <linearGradient x1="0%" y1="0%" x2="0%" y2="100%" id="id1">
+                            <stop offset="0%" style="stop-color:#d5e8d4"/>
+                            <stop offset="100%" style="stop-color:#FFFFF5"/>
+                        </linearGradient>
+                        <linearGradient x1="0%" y1="0%" x2="0%" y2="100%" id="id2">
+                            <stop offset="0%" style="stop-color:#fff2cc"/>
+                            <stop offset="100%" style="stop-color:#ffffff"/>
+                        </linearGradient>
+                        <linearGradient x1="0%" y1="0%" x2="0%" y2="100%" id="id3">
+                            <stop offset="0%" style="stop-color:#f8cecc"/>
+                            <stop offset="100%" style="stop-color:#ffffff"/>
+                        </linearGradient>
+                        <linearGradient x1="0%" y1="0%" x2="0%" y2="100%" id="id4">
+                            <stop offset="0%" style="stop-color:#4FE2E2"/>
+                            <stop offset="100%" style="stop-color:#ffffff"/>
+                        </linearGradient>
+                        <linearGradient x1="0%" y1="0%" x2="0%" y2="100%" id="id5">
+                            <stop offset="0%" style="stop-color:#E8DDB3"/>
+                            <stop offset="100%" style="stop-color:#FFF0CC"/>
+                        </linearGradient>
+                        <filter id="dropShadow">
+                            <feGaussianBlur in="SourceAlpha" stdDeviation="1.7" result="blur"/>
+                            <feOffset in="blur" dx="3" dy="3" result="offsetBlur"/>
+                            <feFlood flood-color="#3D4574" flood-opacity="0.4" result="offsetColor"/>
+                            <feComposite in="offsetColor" in2="offsetBlur" operator="in" result="offsetBlur"/>
+                            <feBlend in="SourceGraphic" in2="offsetBlur"/>
+                        </filter>
+                    </defs>
+                    <path d="M 205 75 L 185 75 L 185 98.63" fill="none" stroke="#000000" stroke-miterlimit="10"
+                          pointer-events="none"/>
+                    <path d="M 185 103.88 L 181.5 96.88 L 185 98.63 L 188.5 96.88 Z" fill="#000000" stroke="#000000"
+                          stroke-miterlimit="10" pointer-events="none"/>
+                    <path d="M 340 50 L 403.63 50" fill="none" stroke="#000000" stroke-miterlimit="10"
+                          pointer-events="none"/>
+                    <path d="M 408.88 50 L 401.88 53.5 L 403.63 50 L 401.88 46.5 Z" fill="#000000" stroke="#000000"
+                          stroke-miterlimit="10" pointer-events="none"/>
+                    <path d="M 340 63 L 344 63 L 344 268.63" fill="none" stroke="#000000" stroke-miterlimit="10"
+                          pointer-events="none"/>
+                    <path d="M 344 273.88 L 340.5 266.88 L 344 268.63 L 347.5 266.88 Z" fill="#000000" stroke="#000000"
+                          stroke-miterlimit="10" pointer-events="none"/>
+                    <rect x="70" y="25" width="270" height="50" rx="7.5" ry="7.5" fill="url(#id1)" stroke="#82b366"
+                          pointer-events="none"/>
+                    <g transform="translate(166.5,43.5)">
+                        <switch>
+                            <foreignObject style="overflow:visible;" pointer-events="all" width="76" height="12"
+                                           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                                <div xmlns="http://www.w3.org/1999/xhtml"
+                                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 76px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                                    <div xmlns="http://www.w3.org/1999/xhtml"
+                                         style="display:inline-block;text-align:inherit;text-decoration:inherit;">User
+                                        Interface
+                                    </div>
+                                </div>
+                            </foreignObject>
+                            <text x="38" y="12" fill="#000000" text-anchor="middle" font-size="12px"
+                                  font-family="Helvetica">User Interface
+                            </text>
+                        </switch>
+                    </g>
+                    <path d="M 185 155 L 185 178.63" fill="none" stroke="#000000" stroke-miterlimit="10"
+                          pointer-events="none"/>
+                    <path d="M 185 183.88 L 181.5 176.88 L 185 178.63 L 188.5 176.88 Z" fill="#000000" stroke="#000000"
+                          stroke-miterlimit="10" pointer-events="none"/>
+                    <rect x="70" y="105" width="230" height="50" rx="7.5" ry="7.5" fill="url(#id2)" stroke="#d6b656"
+                          pointer-events="none"/>
+                    <g transform="translate(142.5,123.5)">
+                        <switch>
+                            <foreignObject style="overflow:visible;" pointer-events="all" width="84" height="12"
+                                           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                                <div xmlns="http://www.w3.org/1999/xhtml"
+                                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 86px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                                    <div xmlns="http://www.w3.org/1999/xhtml"
+                                         style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+                                        Browser
+                                        Engine<br/></div>
+                                </div>
+                            </foreignObject>
+                            <text x="42" y="12" fill="#000000" text-anchor="middle" font-size="12px"
+                                  font-family="Helvetica">Browser Engine&lt;br&gt;
+                            </text>
+                        </switch>
+                    </g>
+                    <path d="M 185 240 L 185 260 L 185 255 L 185 268.63" fill="none" stroke="#000000"
+                          stroke-miterlimit="10"
+                          pointer-events="none"/>
+                    <path d="M 185 273.88 L 181.5 266.88 L 185 268.63 L 188.5 266.88 Z" fill="#000000" stroke="#000000"
+                          stroke-miterlimit="10" pointer-events="none"/>
+                    <path d="M 70 215 L 50 215 L 50 268.63" fill="none" stroke="#000000" stroke-miterlimit="10"
+                          pointer-events="none"/>
+                    <path d="M 50 273.88 L 46.5 266.88 L 50 268.63 L 53.5 266.88 Z" fill="#000000" stroke="#000000"
+                          stroke-miterlimit="10" pointer-events="none"/>
+                    <rect x="70" y="190" width="230" height="50" rx="7.5" ry="7.5" fill="url(#id3)" stroke="#b85450"
+                          pointer-events="none"/>
+                    <g transform="translate(136.5,208.5)">
+                        <switch>
+                            <foreignObject style="overflow:visible;" pointer-events="all" width="96" height="12"
+                                           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                                <div xmlns="http://www.w3.org/1999/xhtml"
+                                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 98px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                                    <div xmlns="http://www.w3.org/1999/xhtml"
+                                         style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+                                        Rendering
+                                        Engine<br/></div>
+                                </div>
+                            </foreignObject>
+                            <text x="48" y="12" fill="#000000" text-anchor="middle" font-size="12px"
+                                  font-family="Helvetica">Rendering Engine&lt;br&gt;
+                            </text>
+                        </switch>
+                    </g>
+                    <rect x="269" y="275" width="100" height="50" rx="7.5" ry="7.5" fill="#e3c800" stroke="#b09500"
+                          pointer-events="none"/>
+                    <g transform="translate(287.5,293.5)">
+                        <switch>
+                            <foreignObject style="overflow:visible;" pointer-events="all" width="62" height="12"
+                                           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                                <div xmlns="http://www.w3.org/1999/xhtml"
+                                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(8, 8, 8); line-height: 1.2; vertical-align: top; width: 64px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                                    <div xmlns="http://www.w3.org/1999/xhtml"
+                                         style="display:inline-block;text-align:inherit;text-decoration:inherit;">UI
+                                        Backend<br/>
+                                    </div>
+                                </div>
+                            </foreignObject>
+                            <text x="31" y="12" fill="#080808" text-anchor="middle" font-size="12px"
+                                  font-family="Helvetica">UI Backend&lt;br&gt;
+                            </text>
+                        </switch>
+                    </g>
+                    <rect x="135" y="275" width="100" height="50" rx="7.5" ry="7.5" fill="url(#id4)" stroke="#000000"
+                          pointer-events="none"/>
+                    <g transform="translate(136.5,286.5)">
+                        <switch>
+                            <foreignObject style="overflow:visible;" pointer-events="all" width="96" height="26"
+                                           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                                <div xmlns="http://www.w3.org/1999/xhtml"
+                                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(20, 20, 20); line-height: 1.2; vertical-align: top; width: 96px; white-space: normal; overflow-wrap: normal; text-align: center;">
+                                    <div xmlns="http://www.w3.org/1999/xhtml"
+                                         style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+                                        Javascript
+                                        Interpreter<br/></div>
+                                </div>
+                            </foreignObject>
+                            <text x="48" y="19" fill="#141414" text-anchor="middle" font-size="12px"
+                                  font-family="Helvetica">Javascript Interpreter&lt;br&gt;
+                            </text>
+                        </switch>
+                    </g>
+                    <rect x="0" y="275" width="100" height="50" rx="7.5" ry="7.5" fill="#dae8fc" stroke="#6c8ebf"
+                          pointer-events="none"/>
+                    <g transform="translate(19.5,293.5)">
+                        <switch>
+                            <foreignObject style="overflow:visible;" pointer-events="all" width="60" height="12"
+                                           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                                <div xmlns="http://www.w3.org/1999/xhtml"
+                                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 62px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                                    <div xmlns="http://www.w3.org/1999/xhtml"
+                                         style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+                                        Networking<br/>
+                                    </div>
+                                </div>
+                            </foreignObject>
+                            <text x="30" y="12" fill="#000000" text-anchor="middle" font-size="12px"
+                                  font-family="Helvetica">Networking&lt;br&gt;
+                            </text>
+                        </switch>
+                    </g>
+                    <rect x="410" y="0" width="40" height="325" rx="6" ry="6" fill="url(#id5)" stroke="#82b366"
+                          transform="translate(0,162.5)scale(1,-1)translate(0,-162.5)" pointer-events="none"/>
+                    <g transform="translate(378.5,141.5)rotate(90,46,13)">
+                        <switch>
+                            <foreignObject style="overflow:visible;" pointer-events="all" width="92" height="26"
+                                           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                                <div xmlns="http://www.w3.org/1999/xhtml"
+                                     style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 92px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+                                    <div xmlns="http://www.w3.org/1999/xhtml"
+                                         style="display:inline-block;text-align:inherit;text-decoration:inherit;">Data
+                                        Persistence<br/><br/></div>
+                                </div>
+                            </foreignObject>
+                            <text x="46" y="19" fill="#000000" text-anchor="middle" font-size="12px"
+                                  font-family="Helvetica">Data Persistence&lt;br&gt;&lt;br&gt;
+                            </text>
+                        </switch>
+                    </g>
+                    <path d="M 300 215 L 319 215 L 319 268.63" fill="none" stroke="#000000" stroke-miterlimit="10"
+                          pointer-events="none"/>
+                    <path d="M 319 273.88 L 315.5 266.88 L 319 268.63 L 322.5 266.88 Z" fill="#000000" stroke="#000000"
+                          stroke-miterlimit="10" pointer-events="none"/>
+                </svg>
+            </section>
+            <section>
+                <h3>Browser Components</h3>
+                <ul>
+                    <li><a href="">User Interface:</a>
+                        <ul>
+                            <li>Address Bar, Back, Forward, Bookmark, Reload, Dev Tools etc</li>
+                        </ul>
+                    </li>
+                    <li><a href="">Browser Engine:</a>
+                        <ul>
+                            <li>Bridge between User Interface and Rendering Engine</li>
+                            <li>Provides hooks to initiate loading of URL, other actions like reload, back forward
+                                etc.
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="">Layout/Rendering Engine:</a>
+                        <ul>
+                            <li>Parse the HTML Document, create Content Tree/DOM Tree</li>
+                            <li>Renders the Screen based on DOM Tree.</li>
+                        </ul>
+                    <li><a href="">Networking:</a>
+                        <ul>
+                            <li>Handles networking aspects of Internet Communication, HTTP/s, FTP etc</li>
+                            <li>Implements a cache of retrieve documents to minimize network traffic</li>
+                        </ul>
+                    </li>
+                    <li><a href="">Javascript Engine:</a>
+                        <ul>
+                            <li>Executes JS code and results to Rendering Engine</li>
+                            <li>participate in DOM hooks, execution cycle</li>
+                        </ul>
+                    </li>
+                    <li><a href="">Data Persistence:</a>
+                        <ul>
+                            <li>Helps browser to store data locally and access to File System</li>
+                            <li>Storage includes Cookie, Local Storage, Session Storage, IndexedDB, WebSQL and
+                                FileSystem
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div style="border:1px solid silver; font-size:88%; padding:0.4em; background-color: rgba(255, 255, 255, 0.5)">
+                    <table style="text-align:left; border-collapse:collapse; width:100%;">
+                        <tbody>
+                        <tr>
+                            <th style="text-align:center;" colspan="5">Browser usage</th>
+                        </tr>
+                        <tr style="font-size:88%; height:4px;">
+                            <td style="padding:0 4px; text-align:left;"></td>
+                            <td style="padding:0 4px; text-align:right;"></td>
+                            <td style="width:250px; text-align:left;"></td>
+                            <td style="padding:0 4px; width:1em; text-align:right;"></td>
+                            <td style="padding:0 4px; text-align:right;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; min-width: 8em;"><a
+                                    href="https://en.wikipedia.org/wiki/Google_Chrome" target="_blank" title="Google Chrome">Google
+                                Chrome</a>, <a
+                                    href="https://en.wikipedia.org/wiki/Opera_(web_browser)" target="_blank"
+                                    title="Opera (web browser)">Opera</a> and other
+                                variants (<a href="https://en.wikipedia.org/wiki/Blink_(web_engine)" class="mw-redirect" target="_blank"
+                                             title="Blink (web engine)">Blink</a>)
+                            </td>
+                            <td style="width: 100px; border-left: solid 1px silver; border-right: solid 1px silver;">
+                                <div style="background:#37C837; width:86.00%; overflow: hidden;"> </div>
+                            </td>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; text-align: right;">43.00%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="height:2px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; min-width: 8em;"><a
+                                    href="https://en.wikipedia.org/wiki/Internet_Explorer" target="_blank" title="Internet Explorer">Internet
+                                Explorer</a> (<a
+                                    href="https://en.wikipedia.org/wiki/Trident_(layout_engine)" target="_blank" class="mw-redirect"
+                                    title="Trident (layout engine)">Trident</a>)
+                            </td>
+                            <td style="width: 100px; border-left: solid 1px silver; border-right: solid 1px silver;">
+                                <div style="background:cyan; width:51.60%; overflow: hidden;"> </div>
+                            </td>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; text-align: right;">25.80%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="height:2px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; min-width: 8em;"><a
+                                    href="https://en.wikipedia.org/wiki/Firefox" target="_blank" title="Firefox">Firefox</a> and other
+                                variants (<a
+                                        href="https://en.wikipedia.org/wiki/Gecko_(layout_engine)" target="_blank" class="mw-redirect"
+                                        title="Gecko (layout engine)">Gecko</a>)
+                            </td>
+                            <td style="width: 100px; border-left: solid 1px silver; border-right: solid 1px silver;">
+                                <div style="background:red; width:36.44%; overflow: hidden;"> </div>
+                            </td>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; text-align: right;">18.22%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="height:2px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; min-width: 8em;"><a
+                                    href="https://en.wikipedia.org/wiki/Safari_(web_browser)" target="_blank"
+                                    title="Safari (web browser)">Safari</a> and other
+                                variants (<a href="https://en.wikipedia.org/wiki/WebKit" target="_blank" title="WebKit">WebKit</a>)
+                            </td>
+                            <td style="width: 100px; border-left: solid 1px silver; border-right: solid 1px silver;">
+                                <div style="background:#FF1493; width:11.8%; overflow: hidden;"> </div>
+                            </td>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; text-align: right;">
+                                5.90%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="height:2px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; min-width: 8em;"><a
+                                    href="https://en.wikipedia.org/wiki/Opera_(web_browser)" target="_blank"
+                                    title="Opera (web browser)">Opera</a> (<a
+                                    href="https://en.wikipedia.org/wiki/Presto_(layout_engine)" target="_blank" class="mw-redirect"
+                                    title="Presto (layout engine)">Presto</a>)
+                            </td>
+                            <td style="width: 100px; border-left: solid 1px silver; border-right: solid 1px silver;">
+                                <div style="background:blue; width:4.62%; overflow: hidden;"> </div>
+                            </td>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; text-align: right;">
+                                2.31%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="height:2px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; min-width: 8em;">Others
+                            </td>
+                            <td style="width: 100px; border-left: solid 1px silver; border-right: solid 1px silver;">
+                                <div style="background:yellow; width:9.54%; overflow: hidden;"> </div>
+                            </td>
+                            <td colspan="2" style="padding-left: 0.4em; padding-right: 0.4em; text-align: right;">
+                                4.77%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="height:2px"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+        <section data-background-color="#f2e3ff">
+            <h3>Deep Dive: Rendering engines</h3>
+        </section>
+        <section data-background-color="#FFFFFF">
+            <h3>So what does exactly Rendering engines do?</h3>
+            <img src="img/parsing-flow.png" class="plain fragment"/>
+        </section>
+        <section data-background-color="#F2F2F2">
+            <h3>From HTML document to Display</h3>
+            <img src="img/webkitflow.png" class="plain"/>
+        </section>
+        <section data-background-color="#FFFFFF">
+            <section>
+                <img src="img/html-parsing.png" class="plain"/>
+            </section>
+            <section>
+                <h3>Document Parsing</h3>
+                <ul>
+                    <li>Lexical Analysis</li>
+                    <li>Syntax Analysis</li>
+                    <li>Creation of Parse Tree</li>
+                </ul>
+            </section>
+        </section>
+        <section data-background-color="#fdfff9">
+            <h3>So how does DOM Tree looks like.?</h3>
+            <a href="https://webkit.org/blog/114/webcore-rendering-i-the-basics/" target="_blank">.</a>
+            <div style="display: flex">
+                <img src="img/html-code.png" class="plain" height="230px"/>
+                <img src="img/dom-tree.png" class="plain" style="padding-left: 20px"/>
+                <a href="https://github.com/WebKit/webkit/tree/master/Source/WebCore/html" target="_blank">.</a>
+            </div>
+            <a href="https://github.com/WebKit/webkit/blob/master/Source/WebCore/html/HTMLImageElement.h"
+               target="_blank">.</a>
+            <a href="https://github.com/WebKit/webkit/blob/master/Source/WebCore/html/HTMLOptionElement.h"
+               target="_blank">.</a>
+        </section>
+        <section>
+            <section data-background-color="#f9fffa">
+                <h3>Parsed CSS Rules Tree</h3>
+                <div>
+                    <img src="img/css-rules-tree.png" class="plain" height="330px"/>
+                </div>
+            </section>
+            <section data-background-color="#F5F5F5">
+                <h3>The CSS Box Model</h3>
+                <img src="img/boxdim.png" class="plain" height="230px"/>
+                <a href="https://www.w3.org/TR/CSS2/box.html" target="_blank">.</a>
+            </section>
+        </section>
+        <section data-background-color="#FFF5F5">
+            <h3>A look at CSSOM Tree</h3>
+            <img src="img/render-tree-construction.png" class="plain" height="230px"/>
+            <a href="https://github.com/WebKit/webkit/tree/master/Source/WebCore/css" target="_blank">.</a>
+        </section>
+        <section data-background-color="#F5FFF5">
+            <h3>Render Tree</h3>
+            <br/>
+            <ul>
+                <li> While DOM tree & CSSOM is constructed,
+                    <br/>
+                    Browsers constructs another tree called Render Tree.
+                </li>
+                <br/>
+                <li>Firefox calls it Render Frames/Frame Tree</li>
+            </ul>
+        </section>
+        <section>
+            <section data-background-color="#FFFFFF">
+                <h3>The relation between DOM Tree and Render tree</h3>
+                <img src="img/dom-render-tree.png" class="plain" height="230px"/>
+                <a href="https://www.w3.org/TR/CSS2/box.html" target="_blank">.</a>
+            </section>
+            <section data-background-color="#F5FFF5">
+                <h3>How is Render Tree Constructed?</h3>
+                <br/>
+                <ul>
+                    <li>The DOM and CSSOM trees are combined to form the Render Tree</li>
+                    <li>Render tree contains only the nodes required to render the page</li>
+                    <li>Layout computes the exact position and size of each object.</li>
+                    <li>The final render tree renders pixels to the screen in paint cycle.</li>
+                </ul>
+            </section>
+        </section>
+        <section data-background-color="#edf9ed">
+            <section>
+                <h3>Render Tree Object</h3>
+                <small>Base class of all the Renderers</small>
+                <pre style="width: 65%; font-size: .65em;">
+    <code data-trim data-noescape>
+class RenderObject{
+  virtual void layout();
+  virtual void paint(PaintInfo);
+  virtual void rect repaintRect();
+  Node* node;  //the DOM node
+  RenderStyle* style;  // the computed style
+  RenderLayer* containingLayer; //the containing z-index layer
+}
+    </code>
+</pre>
+            </section>
+            <section>
+                <h3>Render Object Construction <a
+                        href="https://github.com/adobe/webkit/blob/master/Source/WebCore/rendering/RenderObject.cpp#L136"
+                        target="_blank">.</a>
+                </h3>
+                <pre style="width: 65%; font-size: .65em;">
+    <code data-trim data-noescape>
+RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
+{
+    Document* doc = node->document();
+    RenderArena* arena = doc->renderArena();
+    ...
+    RenderObject* o = 0;
+
+    switch (style->display()) {
+        case NONE:
+            break;
+        case INLINE:
+            o = new (arena) RenderInline(node);
+            break;
+        case BLOCK:
+            o = new (arena) RenderBlock(node);
+            break;
+        case INLINE_BLOCK:
+            o = new (arena) RenderBlock(node);
+            break;
+        case FLEX:
+        case INLINE_FLEX:
+            o = new (arena) RenderFlexibleBox(node);
+            break;
+       ...
+    }
+
+    return o;
+}
+    </code>
+</pre>
+            </section>
+        </section>
+        <section data-background-color="#FFFFFF">
+            <h3>Render Layer Encapsulation</h3>
+            <div>
+                <img src="img/rendering-trees.png" class="plain" height="330px"/>
+            </div>
+        </section>
+        <section data-background-color="#f4fff2">
+            <h3>Now Let's revise</h3>
+            <div>
+                <img src="img/analysis-dom-css-js.png" class="plain" height="330px"/>
+            </div>
+        </section>
+        <section data-background-color="#FFF">
+            <h3>Intended Layout</h3>
+            <div>
+                <img src="img/layout-phase.png" class="plain" height="500px"/>
+            </div>
+        </section>
+        <section data-background-color="#fcf2ff">
+            <h3>Layout/Reflow Phase</h3>
+            <br/>
+            <ul>
+                <li> When render tree is created, it doesn't contains position and size.</li>
+                <li> Calculation of Position & Size of each Render Objects happens in this phase</li>
+                <li> Layout is recursive process happens from top to bottom.</li>
+                <li> Position of layout is 0,0 and dimension is viewport only</li>
+                <li> Viewport is the visible part of brower window, rest is hidden via scroll</li>
+                <li> It follows a dirty bit system when calculation happens having flags; dirty &
+                    childern are dirty
+                </li>
+            </ul>
+        </section>
+        <section data-background-color="#FFFFFF">
+            <h3>Layout/Reflow Phase</h3>
+            <br/>
+            <br/>
+            <div style="display: flex">
+                <div>
+                    <ul>
+                        <li>CSS Visual Formatting Model
+                            <ol>
+                                <li>Normal Flow
+                                    <ul>
+                                        <li>Block formatting contexts</li>
+                                        <li>Inline formatting contexts</li>
+                                        <li>Relative positioning</li>
+                                    </ul>
+                                </li>
+                                <li>Floats</li>
+                                <li>Absolute positioning</li>
+                            </ol>
+                        </li>
+                        <li>Dirty Bit System</li>
+                        <li>Global & incremental layout</li>
+                        <li>Asynchronous and Synchronous layout</li>
+                        <li>Width calculations</li>
+                    </ul>
+                </div>
+                <img src="img/reflow.png" class="plain" height="330px"/>
+            </div>
+        </section>
+        <section data-background-color="#fFf2f6">
+            <h3>Layout/Reflow Process</h3>
+            <br/>
+            <ul>
+                <li> Parent renderer determines its own width.</li>
+                <li> Calculation of Position & Size of each Render Objects happens in this phase</li>
+                <li> Parent goes over all children:</li>
+                <ul>
+                    <li> Place the child renderer (sets its x and y).</li>
+                    <li> Calls child layout if needed–they are dirty or we are in a global layout,<br/>
+                        or for some other reason–which calculates the child's height.
+                    </li>
+                </ul>
+                <li> Position of layout is 0,0 and dimension is viewport only</li>
+                <li> Parent uses children's accumulative heights and the heights of margins and padding
+                    to set its own height–this will be used by the parent renderer's parent.
+                </li>
+                <li> Sets its dirty bit to false.</li>
+            </ul>
+        </section>
+        <section data-background-color="#f8f2f6">
+            <h3>Painting/Rendering Phase</h3>
+            <br/>
+            <ul>
+                <li> Render tree is traversed and "paint()" method is called to display content on the
+                    screen
+                </li>
+                <li> Painting can entire tree or incremental based on RenderObjects & childern's
+                    state
+                </li>
+                <li> Periodically, RenderObject invalidates its rectangle the dirty flag.</li>
+                <li> It causes paint cycle, to find dirty region and repaint again.</li>
+            </ul>
+        </section>
+        <section data-background-color="#FFF">
+            <h3>Accelerated Rendering</h3>
+            <img src="img/hardware-accelerated-painting.png" class="plain" />
+        </section>
+        <section  data-background-color="#FFF">
+            <section>
+                <h3>Painting Challenges: Ideal vs real</h3>
+                <divs>
+                    <img src="img/ideal-rendering.png" class="plain" />
+                    <img src="img/real-world-rendering.png" class="plain" />
+                </divs>
+            </section>
+            <section>
+                <h3>Can we do better?</h3>
+                <div>
+                    <img src="img/paint-renderering.png" class="plain" />
+                </div>
+            </section>
+            <section>
+                <h3>And Final Decomposition</h3>
+                <img src="img/raster-renderering.png" class="plain" />
+            </section>
+        </section>
+        <section data-background-color="#F8Fef7">
+            <h3>Let's now Talk about browser threads</h3>
+            <br/>
+            <ul>
+                <li> Rendering engine is multi-threaded
+                    <a href="https://chromium.googlesource.com/chromium/src/+/lkgr/docs/threading_and_tasks.md#Threads"
+                       target="_blank">.
+                    </a>
+                </li>
+                <li> JS engine may be single threaded or parallel with web-worker
+                    <a href="https://chromium.googlesource.com/chromium/src.git/+/62.0.3178.1/third_party/WebKit/Source/bindings/core/v8/V8BindingDesign.md"
+                       target="_blank">
+                        .
+                    </a>
+                </li>
+                <li>JS threads joins/runs with renderer thread
+                    <a href="https://medium.com/@francesco_rizzi/javascript-main-thread-dissected-43c85fce7e23" target="_blank">.</a></li>
+                <li> Network operations can be performed by several parallel threads.<br/>
+                    The number of parallel connections is limited (usually 2–6 connections).
+                </li>
+            </ul>
+        </section>
+        <section data-background-color="#F8Fef7">
+            <p style="font-size: 36px">Lets talk about JS code execution?</p>
+        </section>
+        <section data-background-color="#f7dcd9">
+            <h3> Lets look again.! </h3>
+            <ul>
+                <li> JS code execution hold DOM modification hooks</li>
+                <li> JS DOM hooks eg. <code>document.getElementById('container')</code></li>
+                <li> Based on DOM hooks, DOM tree get modified.
+                <li> With DOM tree changed, Render Tree is constructed again in every frame
+                    calculation.
+                </li>
+                <li> Dirty regions are painted on each pass of frame execution</li>
+                <li> So everything happens in one single thread.</li>
+            </ul>
+        </section>
+        <section data-background-color="#f2f5f9">
+            <h3> Event Loop </h3>
+            <br/>
+            <ul>
+                <li> Browser Main thread is a Event Loop.</li>
+                <li> It's an infinite loop that keeps the process alive.</li>
+                <li> It waits for events (like layout and paint events) and processes them.</li>
+            </ul>
+            <pre style="width: 65%; font-size: .65em;">
+                <code data-trim data-noescape>
+ // Code from Firefox
+ while (!mExiting)
+    NS_ProcessNextEvent(thread);
+                </code>
+            </pre>
+        </section>
+        <section data-background-color="#FFFFFF">
+            <div>
+                <img src="img/whole-view.jpeg" class="plain"/>
+            </div>
+        </section>
+        <section data-background-color="#FFFFFF">
+            <a href="http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVu
+        Y3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1l
+        vdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW
+        91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc2
+        9sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D" target="_blank">
+                JS Event Loop Playground.
+            </a>
+        </section>
+        <section data-background-color="#F8Fef7">
+            <section>
+                <p style="font-size: 36px">Have you heard this term "Critical Rendering Path"?</p>
+            </section>
+            <section>
+                <h3>Critical Rendering Path</h3>
+                <br/>
+                <ol>
+                    <li>Constructing the DOM Tree</li>
+                    <li>Constructing the CSSOM Tree</li>
+                    <li>Running Javscript</li>
+                    <li>Creating Render Tree</li>
+                    <li>Generating the Layout</li>
+                    <li>Painting</li>
+                </ol>
+            </section>
+            <section>
+                <div style="display: flex">
+                    <img src="img/CRP-Timeline.png" class="plain" height="550px"/>
+                    <div>
+                        <p style="font-size: 26px">CRP Timeline</p>
+                        <ol style="font-size: 18px">
+                            <li>Send Request - GET request sent for index.html</li>
+                            <li>Parse HTML and Send Request - <br/>
+                                Begin parsing of HTML and DOM construction. <br/>
+                                Send GET request for style.css and main.js
+                            </li>
+                            <li>Parse Stylesheet - CSSOM created for style.css</li>
+                            <li>Evaluate Script - Evaluate main.js</li>
+                            <li>Layout - Generate Layout based on meta viewport.</li>
+                            <li>Paint - Paint pixels on document</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section data-background-color="#FFFFFF">
+            <h3>How does Browser Event Flow</h3>
+            <div class="fragment">
+                <img src="img/eventflow.png" class="plain" height="430px"/>
+            </div>
+        </section>
+        <section>
+            <p style="font-size: 36px;">References & Links</p>
+            <ul>
+                <li><a href="https://webkit.org/blog/114/webcore-rendering-i-the-basics/" target="_blank">Webkit Rendering</a></li>
+                <li><a href="https://github.com/WebKit/webkit" target="_blank">WebKit Source Code</a></li>
+                <li><a href="https://www.html5rocks.com/en/tutorials/internals/howbrowserswork/" target="_blank">HTML5 Rocks
+                    Internals</a></li>
+                <li><a href="https://chromium.org/developers/the-rendering-critical-path" target="_blank">Chrome Design Documents</a></li>
+            </ul>
+        </section>
+        <section>
+            <h3>Q&A</h3>
+            <p style="font-size: 36px;" class="fragment">Thank you :)</p>
+        </section>
+    </div>
+</div>
+
+<script src="../reveal/lib/js/head.min.js"></script>
+<script src="../reveal/js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        dependencies: [
+            {src: '../reveal/plugin/markdown/marked.js'},
+            {src: '../reveal/plugin/markdown/markdown.js'},
+            {src: '../reveal/plugin/notes/notes.js', async: true},
+            {
+                src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+    // Shows the slide number using default formatting
+    Reveal.configure({slideNumber: true});
+
+    // Slide number formatting can be configured using these variables:
+    //  "h.v": 	horizontal . vertical slide number (default)
+    //  "h/v": 	horizontal / vertical slide number
+    //    "c": 	flattened slide number
+    //  "c/t": 	flattened slide number / total slides
+    Reveal.configure({slideNumber: 'c/t'});
+    Reveal.configure({overview: true});
+
+    // Control which views the slide number displays on using the "showSlideNumber" value:
+    //     "all": show on all views (default)
+    // "speaker": only show slide numbers on speaker notes view
+    //   "print": only show slide numbers when printing to PDF
+    Reveal.configure({showSlideNumber: 'speaker'});
+</script>
+
+</body>
+</html>

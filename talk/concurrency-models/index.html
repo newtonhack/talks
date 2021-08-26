@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Concurrency Models</title>
+
+    <meta name="description" content="Angular Internals">
+    <meta name="author" content="Anvay Patil">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../reveal/css/reveal.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+    <link rel="stylesheet" href="../reveal/lib/css/wrapper.css">
+    <link rel="stylesheet" href="concurrency-models.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/1.0.0/anime.min.js"></script>
+    <style>
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? '../reveal/css/print/pdf.css' : '../reveal/css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <canvas id="c" width="3360" height="496"></canvas>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section>
+
+                <section>
+                    <h1>Concurrency Models</h1>
+                    <p>
+                        <small>Created by <a href="">Anvay Patil</a></small>
+                    </p>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <p>
+                        <small>Note: arrow keys to move on slides, Esc to zoom-out</small>
+                    </p>
+                    <aside class="notes" data-markdown>
+                        ## ABC
+                    </aside>
+                </section>
+                <section>
+                    <h3>About Me ?</h3>
+                </section>
+            </section>
+            <section data-background-color="#2c5705" style="color: #fefdff" data-background-transition="zoom">
+                <h3 style="color: #fefdff">Outline of talk</h3>
+                <ol class="fragment">
+                    <li class="fragment">Concurrency & Parallelism</li>
+                    <li class="fragment">OS support & concepts</li>
+                    <li class="fragment">Concurrency Abstractions</li>
+                    <li class="fragment">Concurrency Jargons</li>
+                    <li class="fragment">Concurrency Models</li>
+                    <li class="fragment">Categories of Concurrency Models</li>
+                    <li class="fragment">Languages each one supports</li>
+                </ol>
+                </p>
+                <aside class="notes" data-markdown>
+                    #### Talk about basic outline of talk
+                    - Concurrency & Parallelism
+                    - OS support & concepts
+                    - Concurrency Abstractions
+                    - Concurrency Jargons
+                    - Concurrency Models
+                    - Categories of Concurrency Models
+                    - Languages each one supports
+                </aside>
+            </section>
+            <section>
+                <h3>Concurrency & Parallelism</h3>
+                <blockquote class="fragment">
+                    Concurrency is all about dealing with multiple things at once.
+                </blockquote>
+                <blockquote class="fragment">
+                    Parallelism is all about doing multiple things at once.
+                </blockquote>
+
+                <aside class="notes" data-markdown>
+                    ### Concepts
+                    - We want to run a single task or set of task (may be inter-related)
+                    - What do we mean by Concurrency?
+                    Concurrency is all about dealing with multiple things at once.
+                    - How is it different from Parallelism?
+                    Parallelism is all about doing multiple things at once.
+                </aside>
+            </section>
+            <section>
+                <h3>How we apply these into real world? </h3>
+                <ul>
+                    <li class="fragment">Concurrency and parallelism are often confused because traditional threads and
+                        locks don’t
+                        provide any direct support for parallelism.</li>
+                    <li class="fragment">
+                        If you want to exploit multiple cores, your only choice is to create a
+                        concurrent program and then run it on parallel hardware.
+                    </li>
+                    <li class="fragment">
+                        There will always be a need to communicate across parallel or concurrent running tasks.
+                    </li>
+                    <li class="fragment">
+                        But the beauty lies in how efficiently you communicate (if need-be) between parallel/concurrent
+                        running tasks with lesser waits
+                    </li>
+                </ul>
+                <aside class="notes" data-markdown>
+                    ### Basics
+                    - Concurrency and parallelism are often confused because traditional threads and locks don’t provide
+                    any direct support
+                    for parallelism.
+                    - If you want to exploit multiple cores, your only choice is to create a
+                    concurrent program and then run it on parallel hardware.
+                    - There will always be a need to communicate across parallel or concurrent running tasks. (Tony
+                    Hoare Paper)
+                    - The beauty lies in how efficiently you communicate (if need-be) between parallel/concurrent
+                    running tasks with lesser waits
+
+                </aside>
+            </section>
+            <section>
+                <h3>OS Concepts of Threads and Locks</h3>
+                <aside class="notes" data-markdown>
+                    ### OS concepts
+                    These concepts exits/originate from OS fundamentals
+                    -> OS have Multiple Processes.
+                    -> Multiple Processes run enabling feature like Multi-processing OR dealing with Multiple things are
+                    once.
+                    -> If you want to communicate across multiple processes then the solution is using IPC.
+                    -> Threads are another level abstraction inside process itself.
+                    -> A Process can have Multiple threads.
+                    -> Threads can run parallel or run concurrently depends on how they are programmed.
+                    -> Fundamentally, For Developer's it all "Depends on how your runtime support is available and how
+                    you leverage it".
+                </aside>
+            </section>
+            <section>
+                <h3>Multi-core interaction</h3>
+                <aside class="notes" data-markdown>
+                    ### Multi-core interaction concepts
+                </aside>
+            </section>
+
+            <section>
+                <h3>A level of abstraction.</h3>
+                <aside class="notes" data-markdown>
+                    ### A level of abstraction.
+                    - Even though Thread is a OS low level concept, and languages support that, Multi-threaded
+                    programming is hard
+                    - But still when asked about "Is your code multi-threaded? Non-Blocking? Fast?" we see low credence.
+                    - Reason, low level plumbing is often complicated.
+                    There can be too many locks, there can be no locks. the order of locks can go incorrect.
+                    Detect incorrectness an recover from it.
+                    - To make complicate things simplified, we create abstractions.
+                    - So what we have for this one, we have models/mechanisms to efficiently deal with concurrency.
+                    ( models which help's you deal with concurrency with efficient data sharing between them )
+                </aside>
+            </section>
+
+            <section>
+                <h3>Blocking vs Non-Blocking, Locking vs Lock-Free</h3>
+                <aside class="notes" data-markdown>
+                    ### Blocking vs Non-Blocking, Locking vs Lock-Free
+                    Nature of Multi-threaded of code.
+                    - Blocking -> When we block one thread waiting for other thread or IO for execution, it is Blocking.
+                    ( Thread wait no spin cycle ).
+                    - Non-Blocking -> When a thread not waiting for execution other thread, it is non-blocking ( With
+                    help of Atomic/ CAS supported data structures).
+                    Mechanism used in Multi-threaded code
+                    - Locking -> A way to synchronize / (make two thread's run in sequence)/ Serialize multi-threaded
+                    code for task. (With help of Mutex's and semaphore's)
+                    - Lock-Free -> A way to help multi-threaded code share data/state between themselves.
+                </aside>
+            </section>
+
+            <section>
+                <h3>Transactions</h3>
+                <aside class="notes" data-markdown>
+                    ### Transactional
+                    - Some times Let's say in distributed computing world or even multi-processor computing world, data
+                    is passed to cores.
+                    - It may so happens that data passed to a core is not more valid and got changed to something else.
+                    - This problem is very similar to a problem from database world, multiple read and write of data
+                    should guarantee ACID
+                    and a mechanism of rollback or commit.
+
+                </aside>
+            </section>
+
+            <section>
+                <h3> Types of Transactions</h3>
+                <ul>
+                    <li>Pessimistic Transactions</li>
+                    <li>Optimistic Transactions</li>
+                    <li>Semi-Optimistic Transactions</li>
+                </ul>
+                <aside class="notes" data-markdown>
+                    ### Types of Transactions
+                    - Pessimistic Transactions
+                    - Optimistic Transactions
+                    - Semi-Optimistic Transactions
+                </aside>
+            </section>
+
+
+            <section>
+                <h3>But a Question</h3>
+                <aside class="notes" data-markdown>
+                    - What is bottle-neck in between Parallel-Multi-Core-Fast & Need of you code to go blocking..?
+                    Shared Mutable State
+                    - If one can achieve to eliminate one of these Shared/Mutable/State we can achieve concurrency
+                    without a worry.
+                    OR
+                    Make the data share transactional. Remember Transactional (ACID properties)
+
+                    - And all the models which exists till date sort of tries to eliminate one of (shared/mutable/state)
+                    or make things transactional.
+
+                </aside>
+            </section>
+
+            <section>
+                <h3>Type of Concurrency Models</h3>
+                <ol>
+                    <li>Threads and Locks</li>
+                    <li>Atomic and Thread-local's</li>
+                    <li>Functional Programming</li>
+                    <li>Actors</li>
+                    <li>Communicating Sequential Process</li>
+                    <li>Software transactional Memory</li>
+                    <li>Data-Parallelism</li>
+                    <li>Lambda Architecture</li>
+                    <li>Event-Driven Architecture</li>
+                    <li>Grid-Computing</li>
+                </ol>
+                <aside class="notes" data-markdown>
+                    - Threads and Locks
+                    - Atomic and Thread-local's
+                    - Functional Programming
+                    - Actors
+                    - Communicating Sequential Process
+                    - Software Transaction Memory
+                    - Data-Parallelism
+                    - Lambda Architecture
+                    - Event-Driven Architecture
+                    - Grid-Computing
+                </aside>
+            </section>
+
+            <section>
+                <h3>Threads and Locks</h3>
+                <aside class="notes" data-markdown>
+                    ### Threads & Locks with Mutex
+                </aside>
+            </section>
+            <section>
+                <h3>Atomic and Thread-local's</h3>
+                <aside class="notes" data-markdown>
+                    ### Atomic CAS & Thread Local's
+                </aside>
+            </section>
+            <section>
+                <h3>Functional Programming</h3>
+                <aside class="notes" data-markdown>
+                    ### Functional Programming
+                </aside>
+            </section>
+            <section>
+                <h3>Actors</h3>
+                <aside class="notes" data-markdown>
+                    ### Actors
+                </aside>
+            </section>
+            <section>
+                <h3>Communicating Sequential Process</h3>
+                <aside class="notes" data-markdown>
+                    ### Communicating Sequential Process
+                </aside>
+            </section>
+            <section>
+                <h3>Software Transaction Memory</h3>
+                <aside class="notes" data-markdown>
+                    ### Software Transaction Memory
+                </aside>
+            </section>
+            <section>
+                <h3>Data-Parallelism</h3>
+                <aside class="notes" data-markdown>
+                    ### Data-Parallelism
+                </aside>
+            </section>
+            <section>
+                <h3>Lambda Architecture</h3>
+                <aside class="notes" data-markdown>
+                    ### Lambda Architecture
+                </aside>
+            </section>
+            <section>
+                <h3>Event-Driven Architecture</h3>
+                <aside class="notes" data-markdown>
+                    ### Event-Driven Architecture
+                </aside>
+            </section>
+            <section>
+                <h3>Grid Computing</h3>
+                <aside class="notes" data-markdown>
+                    ### Grid Computing
+                </aside>
+            </section>
+
+            <section>
+                <h3>Functional Programming & CSP </h3>
+                <aside class="notes" data-markdown>
+                    ### Functional Programming & CSP similarities
+                </aside>
+            </section>
+
+            <section>
+                <h3>Anatomy of Concurrency/Parallelism with Programming languages & Frameworks</h3>
+                <aside class="notes" data-markdown>
+                    ### Anatomy of Concurrency & Parallelism with Programming languages
+                    - Java
+                    - Python
+                    - Golang
+                    - Javascript
+                    - C/C++
+                </aside>
+            </section>
+
+            <section>
+                <h3>Q&A</h3>
+                <p style="font-size: 36px;" class="fragment">Thank you :)</p>
+            </section>
+        </div>
+    </div>
+
+    <script src="../reveal/lib/js/head.min.js"></script>
+    <script src="../reveal/js/reveal.js"></script>
+
+    <script>
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+            dependencies: [
+                { src: '../reveal/plugin/markdown/marked.js' },
+                { src: '../reveal/plugin/markdown/markdown.js' },
+                { src: '../reveal/plugin/notes/notes.js', async: true },
+                {
+                    src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function () {
+                        hljs.initHighlightingOnLoad();
+                    }
+                }
+            ]
+        });
+        Reveal.configure({ backgroundTransition: 'zoom' });
+        // Shows the slide number using default formatting
+        Reveal.configure({ slideNumber: true });
+
+        // Slide number formatting can be configured using these variables:
+        //  "h.v": 	horizontal . vertical slide number (default)
+        //  "h/v": 	horizontal / vertical slide number
+        //    "c": 	flattened slide number
+        //  "c/t": 	flattened slide number / total slides
+        Reveal.configure({ slideNumber: 'c/t' });
+
+        // Control which views the slide number displays on using the "showSlideNumber" value:
+        //     "all": show on all views (default)
+        // "speaker": only show slide numbers on speaker notes view
+        //   "print": only show slide numbers when printing to PDF
+        Reveal.configure({ showSlideNumber: 'speaker' });
+
+        var c = document.getElementById("c");
+        var ctx = c.getContext("2d");
+        var cH;
+        var cW;
+        var bgColor = "#FFFEFF";
+        var animations = [];
+        var circles = [];
+
+        var colorPicker = function () {
+            var colors = [
+                "#FFFEFF",
+                "#d7eb91",
+                "#FFFEFF",
+                "#99cdf7",
+                "#FFFEFF",
+                "#38f9d7"
+            ];
+            var index = 0;
+
+            function next() {
+                index = index++ < colors.length - 1 ? index : 0;
+                return colors[index];
+            }
+
+            function current() {
+                return colors[index];
+            }
+
+            return {
+                next: next,
+                current: current
+            };
+
+        }();
+
+        function removeAnimation(animation) {
+            var index = animations.indexOf(animation);
+            if (index > -1) animations.splice(index, 1);
+        }
+
+        function calcPageFillRadius(x, y) {
+            var l = Math.max(x - 0, cW - x);
+            var h = Math.max(y - 0, cH - y);
+            return Math.sqrt(Math.pow(l, 2) + Math.pow(h, 2));
+        }
+
+        function addClickListeners() {
+            document.addEventListener("touchstart", handleEvent);
+            document.addEventListener("mousedown", handleEvent);
+        };
+
+        function handleEvent(e) {
+            if (e.touches) {
+                e.preventDefault();
+                e = e.touches[0];
+            }
+            var currentColor = colorPicker.current();
+            var nextColor = colorPicker.next();
+            var targetR = calcPageFillRadius(e.pageX, e.pageY);
+            var rippleSize = Math.min(200, cW * .4);
+            var minCoverDuration = 750;
+
+            var pageFill = new Circle({
+                x: e.pageX,
+                y: e.pageY,
+                r: 0,
+                fill: nextColor
+            });
+
+            var fillAnimation = anime({
+                targets: pageFill,
+                r: targetR,
+                duration: Math.max(targetR / 2, minCoverDuration),
+                easing: "easeOutQuart",
+                complete: function () {
+                    bgColor = pageFill.fill;
+                    removeAnimation(fillAnimation);
+                }
+            });
+
+
+            var ripple = new Circle({
+                x: e.pageX,
+                y: e.pageY,
+                r: 0,
+                fill: currentColor,
+                stroke: {
+                    width: 3,
+                    color: currentColor
+                },
+
+                opacity: 1
+            });
+
+            var rippleAnimation = anime({
+                targets: ripple,
+                r: rippleSize,
+                opacity: 0,
+                easing: "easeOutExpo",
+                duration: 900,
+                complete: removeAnimation
+            });
+
+
+            var particles = [];
+            for (var i = 0; i < 32; i++) {
+                var particle = new Circle({
+                    x: e.pageX,
+                    y: e.pageY,
+                    fill: currentColor,
+                    r: anime.random(24, 48)
+                });
+
+                particles.push(particle);
+            }
+            var particlesAnimation = anime({
+                targets: particles,
+                x: function (particle) {
+                    return particle.x + anime.random(rippleSize, -rippleSize);
+                },
+                y: function (particle) {
+                    return particle.y + anime.random(rippleSize * 1.15, -rippleSize * 1.15);
+                },
+                r: 0,
+                easing: "easeOutExpo",
+                duration: anime.random(1000, 1300),
+                complete: removeAnimation
+            });
+
+            animations.push(fillAnimation, rippleAnimation, particlesAnimation);
+        }
+
+        function extend(a, b) {
+            for (var key in b) {
+                if (b.hasOwnProperty(key)) {
+                    a[key] = b[key];
+                }
+            }
+            return a;
+        }
+
+        var Circle = function (opts) {
+            extend(this, opts);
+        };
+
+        Circle.prototype.draw = function () {
+            ctx.globalAlpha = this.opacity || 1;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
+            if (this.stroke) {
+                ctx.strokeStyle = this.stroke.color;
+                ctx.lineWidth = this.stroke.width;
+                ctx.stroke();
+            }
+            if (this.fill) {
+                ctx.fillStyle = this.fill;
+                ctx.fill();
+            }
+            ctx.closePath();
+            ctx.globalAlpha = 1;
+        };
+
+        var animate = anime({
+            duration: Infinity,
+            update: function () {
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, cW, cH);
+                animations.forEach(function (anim) {
+                    anim.animatables.forEach(function (animatable) {
+                        animatable.target.draw();
+                    });
+                });
+            }
+        });
+
+
+        var resizeCanvas = function () {
+            cW = window.innerWidth;
+            cH = window.innerHeight;
+            c.width = cW * devicePixelRatio;
+            c.height = cH * devicePixelRatio;
+            ctx.scale(devicePixelRatio, devicePixelRatio);
+        };
+
+        (function init() {
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
+            addClickListeners();
+            if (!!window.location.pathname.match(/fullcpgrid/)) {
+                startFauxClicking();
+            }
+            handleInactiveUser();
+        })();
+
+        function handleInactiveUser() {
+            var inactive = setTimeout(function () {
+                fauxClick(cW / 2, cH / 2);
+            }, 2000);
+
+            function clearInactiveTimeout() {
+                clearTimeout(inactive);
+                document.removeEventListener("mousedown", clearInactiveTimeout);
+                document.removeEventListener("touchstart", clearInactiveTimeout);
+            }
+
+            document.addEventListener("mousedown", clearInactiveTimeout);
+            document.addEventListener("touchstart", clearInactiveTimeout);
+        }
+
+        function startFauxClicking() {
+            setTimeout(function () {
+                fauxClick(anime.random(cW * .2, cW * .8), anime.random(cH * .2, cH * .8));
+                startFauxClicking();
+            }, anime.random(200, 900));
+        }
+
+        function fauxClick(x, y) {
+            var fauxClick = new Event("mousedown");
+            fauxClick.pageX = x;
+            fauxClick.pageY = y;
+            document.dispatchEvent(fauxClick);
+        }
+
+    </script>
+
+</body>
+
+</html>

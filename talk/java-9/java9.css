@@ -1,0 +1,236 @@
+
+@import url(https://fonts.googleapis.com/css?family=Quicksand:400,700,400italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+/**
+ * Sky theme for reveal.js.
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+/*********************************************
+ * GLOBAL STYLES  #3a3a3a 0%, #000000
+ *********************************************/
+body {
+  background: #0e0a0a;
+}
+
+.reveal {
+  font-family: "Open Sans", sans-serif;
+  font-size: 24px;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+}
+
+::selection {
+  color: white;
+  background: #bbe1e6;
+  text-shadow: none;
+}
+
+/*********************************************
+ * HEADERS
+ *********************************************/
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-size: 36px;
+  margin: 0 0 20px 0;
+  color: #FFFFFF;
+  font-family: "Quicksand", sans-serif;
+  line-height: 0.9em;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+.reveal a p {
+  font-size: 36px;
+}
+.reveal small {
+  font-size: 20px;
+}
+.reveal h1 {
+  font-size: 2em;
+  text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+}
+
+/*********************************************
+ * LINKS
+ *********************************************/
+.reveal a:not(.image) {
+  color: #53a4dd;
+  text-decoration: none;
+  -webkit-transition: color .15s ease;
+  -moz-transition: color .15s ease;
+  -ms-transition: color .15s ease;
+  -o-transition: color .15s ease;
+  transition: color .15s ease;
+}
+
+.reveal a:not(.image):hover {
+  color: #53a4dd;
+  text-shadow: none;
+  border: none;
+}
+
+.reveal .roll span:after {
+  color: #fff;
+  background: #53a4dd;
+}
+
+/********************************************
+* section
+*********************************************/
+.reveal .page{
+  background: rgba(9, 9, 9, 0.85);
+  border: 0px solid #FFFFFF;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  -webkit-transition: all .2s linear;
+  -moz-transition: all .2s linear;
+  -ms-transition: all .2s linear;
+  -o-transition: all .2s linear;
+  transition: all .2s linear;
+  padding-bottom: 70px!important;
+  padding-top: 20px !important;
+  width: 90%;
+}
+
+/*********************************************
+ * IMAGES
+ *********************************************/
+.reveal section img {
+
+  background: rgba(255, 255, 255, 0.12);
+  border: 0px solid #333333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  -webkit-transition: all .2s linear;
+  -moz-transition: all .2s linear;
+  -ms-transition: all .2s linear;
+  -o-transition: all .2s linear;
+  transition: all .2s linear;
+}
+
+.reveal a:hover img {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #3b759e;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+}
+
+/*********************************************
+ * NAVIGATION CONTROLS
+ *********************************************/
+.reveal .controls div.navigate-left,
+.reveal .controls div.navigate-left.enabled {
+  border-right-color: #3b759e;
+}
+
+.reveal .controls div.navigate-right,
+.reveal .controls div.navigate-right.enabled {
+  border-left-color: #3b759e;
+}
+
+.reveal .controls div.navigate-up,
+.reveal .controls div.navigate-up.enabled {
+  border-bottom-color: #3b759e;
+}
+
+.reveal .controls div.navigate-down,
+.reveal .controls div.navigate-down.enabled {
+  border-top-color: #3b759e;
+}
+
+.reveal .controls div.navigate-left.enabled:hover {
+  border-right-color: #74a7cb;
+}
+
+.reveal .controls div.navigate-right.enabled:hover {
+  border-left-color: #74a7cb;
+}
+
+.reveal .controls div.navigate-up.enabled:hover {
+  border-bottom-color: #74a7cb;
+}
+
+.reveal .controls div.navigate-down.enabled:hover {
+  border-top-color: #74a7cb;
+}
+
+/*********************************************
+ * PROGRESS BAR
+ *********************************************/
+.reveal .progress {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.reveal .progress span {
+  background: #3b759e;
+  -webkit-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+  -moz-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+  -ms-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+  -o-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+  transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+}
+
+.reveal .background-video{
+  max-width: 100% !important;
+  max-height: none;
+  width: 100%;
+
+}
+.shadow{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0px 0px 100px 50px #111;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+.reveal .present-back{
+  box-shadow: 0px 0px 100px 10px #111;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+}
+
+/*****************************
+*
+******************************/
+.Row
+{
+  display: table;
+  width: 100%; /*Optional*/
+  table-layout: fixed; /*Optional*/
+  border-spacing: 5px; /*Optional*/
+}
+.Column
+{
+  display: table-cell;
+}
+/***************************
+*
+****************************/
+.video-background {
+  background: #000;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: -99;
+}
+.video-foreground,
+.video-background iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+@media (min-aspect-ratio: 16/9) {
+  .video-foreground { height: 300%; top: -100%; }
+}
+@media (max-aspect-ratio: 16/9) {
+  .video-foreground { width: 300%; left: -100%; }
+}
