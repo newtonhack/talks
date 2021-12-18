@@ -14,10 +14,10 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" href="../reveal/css/reveal.css">
+    <link rel="stylesheet" href="../__reveal/css/reveal.css">
     <!-- Theme used for syntax highlighting of code -->
-    <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
-    <link rel="stylesheet" href="../reveal/lib/css/wrapper.css">
+    <link rel="stylesheet" href="../__reveal/lib/css/zenburn.css">
+    <link rel="stylesheet" href="../__reveal/lib/css/wrapper.css">
     <link rel="stylesheet" href="concurrency-models.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/1.0.0/anime.min.js"></script>
@@ -34,7 +34,7 @@
         var link = document.createElement('link');
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = window.location.search.match(/print-pdf/gi) ? '../reveal/css/print/pdf.css' : '../reveal/css/print/paper.css';
+        link.href = window.location.search.match(/print-pdf/gi) ? '../__reveal/css/print/pdf.css' : '../__reveal/css/print/paper.css';
         document.getElementsByTagName('head')[0].appendChild(link);
     </script>
 </head>
@@ -355,8 +355,8 @@
         </div>
     </div>
 
-    <script src="../reveal/lib/js/head.min.js"></script>
-    <script src="../reveal/js/reveal.js"></script>
+    <script src="../__reveal/lib/js/head.min.js"></script>
+    <script src="../__reveal/js/reveal.js"></script>
 
     <script>
         // More info about config & dependencies:
@@ -364,11 +364,11 @@
         // - https://github.com/hakimel/reveal.js#dependencies
         Reveal.initialize({
             dependencies: [
-                { src: '../reveal/plugin/markdown/marked.js' },
-                { src: '../reveal/plugin/markdown/markdown.js' },
-                { src: '../reveal/plugin/notes/notes.js', async: true },
+                { src: '../__reveal/plugin/markdown/marked.js' },
+                { src: '../__reveal/plugin/markdown/markdown.js' },
+                { src: '../__reveal/plugin/notes/notes.js', async: true },
                 {
-                    src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function () {
+                    src: '../__reveal/plugin/highlight/highlight.js', async: true, callback: function () {
                         hljs.initHighlightingOnLoad();
                     }
                 }
