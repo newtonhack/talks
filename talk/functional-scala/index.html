@@ -7,7 +7,6 @@
     <title>Functional programming in Scala</title>
 
     <meta name="description" content="Functional programming in Scala">
-    <meta name="author" content="Anvay Patil">
 
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -41,7 +40,7 @@
                 <h1>Scala</h1>
                 <h4>Object-Functional Programming language</h4>
                 <p>
-                    <small>Created by <a href="">Anvay Patil</a></small>
+                    <small>Created by <a href="" class="author-name"></a></small>
                 </p>
             <br/>
             <br/>
@@ -494,6 +493,9 @@
             { src: '../__reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
         ]
     });
+    Array.from(document.getElementsByClassName("author-name")).forEach(function (item) {
+            item.textContent = "litaP yavnA".split('').reverse().join('')
+        });
 </script>
 
 </body>

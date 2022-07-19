@@ -7,7 +7,6 @@
     <title>Internals of Web Browsers</title>
 
     <meta name="description" content="Internals of Web Browsers">
-    <meta name="author" content="Anvay Patil">
 
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -40,7 +39,7 @@
             <section>
                 <h1>Browser Internals</h1>
                 <p>
-                    <small>Created by <a href="">Anvay Patil</a></small>
+                    <small>Created by <a href="" class="author-name"></a></small>
                 </p>
                 <br/>
                 <br/>
@@ -854,6 +853,11 @@ RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
     // "speaker": only show slide numbers on speaker notes view
     //   "print": only show slide numbers when printing to PDF
     Reveal.configure({showSlideNumber: 'speaker'});
+
+    Array.from(document.getElementsByClassName("author-name")).forEach(function (item) {
+            item.textContent = "litaP yavnA".split('').reverse().join('')
+        });
+
 </script>
 
 </body>

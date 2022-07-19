@@ -7,7 +7,6 @@
     <title>Java 9, An early sneak peek</title>
 
     <meta name="description" content="Java 9, An early sneak peek">
-    <meta name="author" content="Anvay">
 
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -38,7 +37,7 @@
                 <h1>Java 9</h1>
                 <h4>An early sneak peek</h4>
                 <p>
-                    <small>talk by <a href="">Anvay P</a></small>
+                    <small>talk by <a href="" class="author-name"></a></small>
                 </p>
                 <br/>
                 <br/>
@@ -669,6 +668,9 @@ class List$Point { Point get(Point index); }
         ]
     });
 
+    Array.from(document.getElementsByClassName("author-name")).forEach(function (item) {
+            item.textContent = "litaP yavnA".split('').reverse().join('')
+        });
 </script>
 
 </body>

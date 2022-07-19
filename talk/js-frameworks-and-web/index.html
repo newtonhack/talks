@@ -7,7 +7,6 @@
     <title>Javascript Frameworks and Web</title>
 
     <meta name="description" content="Angular Internals">
-    <meta name="author" content="Anvay Patil">
 
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -40,7 +39,7 @@
             <section style="background-color: rgba(255,255,255,0.3); border-radius:20px; ">
                 <p style="font-size: 38px;">JS Frameworks and Today's Web</p>
                 <p>
-                    <small>Created by <a href="">Anvay Patil</a></small>
+                    <small>Created by <a href="" class="author-name"></a></small>
                 </p>
                 <br/>
                 <br/>
@@ -301,6 +300,11 @@
     // "speaker": only show slide numbers on speaker notes view
     //   "print": only show slide numbers when printing to PDF
     Reveal.configure({showSlideNumber: 'speaker'});
+
+    
+    Array.from(document.getElementsByClassName("author-name")).forEach(function (item) {
+            item.textContent = "litaP yavnA".split('').reverse().join('')
+        });
 </script>
 
 </body>

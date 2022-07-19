@@ -7,7 +7,6 @@
     <title>Concurrency Models</title>
 
     <meta name="description" content="Angular Internals">
-    <meta name="author" content="Anvay Patil">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -49,7 +48,7 @@
                 <section>
                     <h1>Concurrency Models</h1>
                     <p>
-                        <small>Created by <a href="">Anvay Patil</a></small>
+                        <small>Created by <a href="" class="author-name"></a></small>
                     </p>
                     <br />
                     <br />
@@ -614,6 +613,9 @@
             document.dispatchEvent(fauxClick);
         }
 
+        Array.from(document.getElementsByClassName("author-name")).forEach(function (item) {
+            item.textContent = "litaP yavnA".split('').reverse().join('')
+        });
     </script>
 
 </body>
